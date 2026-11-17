@@ -93,6 +93,7 @@ resource "aws_lambda_function" "py_lambda" {
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256
   function_name    = "CinemaCityWatcher"
+  depends_on       = [aws_cloudwatch_log_group.lambda_log_group]
   role             = aws_iam_role.role.arn
   handler          = "lambda_handler.handler"
   runtime          = "python3.12"
@@ -118,6 +119,31 @@ resource "aws_lambda_function" "py_lambda" {
     }
   }
 }
+
+# Define log policy and log group for lambda
+data "aws_iam_policy_document" "lambda_log_policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+}
+resource "aws_iam_policy" "lambda_log_policy" {
+  name   = "lambda-log-policy"
+  policy = data.aws_iam_policy_document.lambda_log_policy.json
+}
+resource "aws_iam_role_policy_attachment" "lambda_log_policy" {
+  role       = aws_iam_role.role.name
+  policy_arn = aws_iam_policy.lambda_log_policy.arn
+}
+resource "aws_cloudwatch_log_group" "lambda_log_group" {
+  name              = "/aws/lambda/CinemaCityWatcher"
+  retention_in_days = 7
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
 
 data "aws_caller_identity" "current" {}
 
