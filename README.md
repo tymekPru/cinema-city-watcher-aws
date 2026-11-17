@@ -1,3 +1,16 @@
+> [!IMPORTANT]
+> **This project is discontinued and the repository is archived.**
+>
+> It will not be developed further in this form. It was built around a single
+> cinema (IMAX at Cinema City Praha Flora) and an AWS serverless stack.
+>
+> The successor, covering all Cinema City cinemas in Czechia and Poland,
+> self-hosted and using [ntfy](https://ntfy.sh) for notifications, lives at:
+>
+> **https://github.com/tymekPru/cinema-city-watcher**
+>
+> This repository stays online read-only for reference.
+
 # cc-watcher — Cinema City ticket watcher (CZ)
 
 Cinema City showtime watcher for the Czech Republic, initially configured for
